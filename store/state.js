@@ -4,6 +4,8 @@
 export default () => {
   return {
     allStates: [],
-    birdsInState: []
+    birdsInState: [],
+    notableStateBirds: [],
+    birdImages: {}
   }
 }

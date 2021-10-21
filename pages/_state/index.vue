@@ -1,33 +1,69 @@
 <template>
   <div>
     <h1>{{ stateName }}</h1>
-    <p>{{ stateObj.code }}</p>
-    <p>{{ stateBirds }}</p>
+    <div class="c-PageState_container">
+    <BirdCard
+      v-for="birdObj in stateBirds"
+      :key="birdObj.speciesCode"
+      class="c-PageState_bird" 
+      :bird="birdObj"
+      :imageXml="$store.getters.getBirdImage(birdObj.sciName)"
+    />
+    </div>
+    <p>{{ flickrNotice }}</p>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator';
+import BirdCard from '~/components/BirdCard.vue';
 
-@Component
+@Component({
+  components: {
+    BirdCard
+  }
+})
 export default class PageState extends Vue {
   stateName = this.$route.params.state;
 
   get stateObj () {
+    console.log(this.$store.state.birdImages);
     return this.$store.getters.getCurrentState(this.stateName);
   }
 
   get stateBirds () {
+    console.log(this.$store.state.birdImages);
     return this.$store.getters.getBirdsInState;
   }
 
-  async asyncData ({ store, route }) {
-    console.log('params', route.params);
+  get flickrNotice () {
+      return process.env.FLICKR_NOTICE;
+  }
+
+  async asyncData ({ store, route }: { [key: string]: any}) {
     await store.dispatch('setStateBirds', route.params.state);
+    // this is super slow if store is empty
+    await Promise.all(store.getters.getBirdsInState.map((bird: any) => {
+      // only request image if species not stored yet
+      if (!store.getters.getBirdImage(bird.sciName)) {
+        return store.dispatch('setBirdImage', bird.sciName);
+      } else {
+        return null;
+      }
+    }));
   }
 }
 </script>
 
 <style lang="scss">
+.c-PageState {
+  &_container {
+    display: flex;
+    flex-flow: row wrap;
+    gap: 1.5rem;
+  }
+  &_bird {
 
+  }
+}
 </style>
