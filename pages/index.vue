@@ -1,7 +1,7 @@
 <template>
   <div class="c-PageHome">
     <h1>US States and Their Birds</h1>
-    <p>Click on any state to view the birds recently observed in that state.</p>
+    <h4>Click on any state to view the birds recently observed in that state.</h4>
     <div class="c-PageHome_stateContainer">
       <NuxtLink
         v-for="state in stateCodes"
@@ -13,24 +13,18 @@
         </div>
       </NuxtLink>
     </div>
-    <p>{{ flickrNotice }}</p>
   </div>
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { Component, Vue } from 'nuxt-property-decorator';
 
-export default Vue.extend({
-  computed: {
-    flickrNotice () {
-      return process.env.FLICKR_NOTICE;
-    },
-
-    stateCodes () {
+@Component
+export default class PageHome extends Vue {
+  get stateCodes () {
       return this.$store.getters.getAllStates;
-    }
   }
-})
+}
 </script>
 
 <style lang="scss">

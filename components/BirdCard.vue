@@ -3,7 +3,6 @@
     <h2>{{ bird.comName }}</h2>
     <h3>{{ bird.sciName }}</h3>
     <p>Last seen on {{ bird.obsDt }} at {{ bird.locName }}</p>
-    <p>Short desc</p>
     <img :src="image" />
     <!-- TODO: add credit for images -->
   </div>
@@ -22,13 +21,29 @@
     readonly imageXml!: string;
 
     get image () {
-      const $xml = $(this.imageXml) || '';
-      const serverId = $xml.find('photo').eq(0).attr('server');
-      const imageId = $xml.find('photo').eq(0).attr('id');
-      const secret = $xml.find('photo').eq(0).attr('secret');
-      const sizeSuffix = 'n';
-      return `https://live.staticflickr.com/${serverId}/${imageId}_${secret}_${sizeSuffix}.jpg`;
+      if (typeof window !== 'undefined') {
+        const $xml = $(this.imageXml) || '';
+        const serverId = $xml.find('photo').eq(0).attr('server');
+        const imageId = $xml.find('photo').eq(0).attr('id');
+        const secret = $xml.find('photo').eq(0).attr('secret');
+        const sizeSuffix = 'n';
+        return `https://live.staticflickr.com/${serverId}/${imageId}_${secret}_${sizeSuffix}.jpg`;
+      }
+      return '';
     }
+
+    // public image: string = '';
+
+    // created () {
+    //   if (typeof window !== 'undefined') {
+    //     const $xml = $(this.imageXml) || '';
+    //     const serverId = $xml.find('photo').eq(0).attr('server');
+    //     const imageId = $xml.find('photo').eq(0).attr('id');
+    //     const secret = $xml.find('photo').eq(0).attr('secret');
+    //     const sizeSuffix = 'n';
+    //     this.image = `https://live.staticflickr.com/${serverId}/${imageId}_${secret}_${sizeSuffix}.jpg`;
+    //   }
+    // }
   }
 </script>
 

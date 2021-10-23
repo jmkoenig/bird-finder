@@ -10,7 +10,6 @@
       :imageXml="$store.getters.getBirdImage(birdObj.sciName)"
     />
     </div>
-    <p>{{ flickrNotice }}</p>
   </div>
 </template>
 
@@ -27,17 +26,11 @@ export default class PageState extends Vue {
   stateName = this.$route.params.state;
 
   get stateObj () {
-    console.log(this.$store.state.birdImages);
     return this.$store.getters.getCurrentState(this.stateName);
   }
 
   get stateBirds () {
-    console.log(this.$store.state.birdImages);
     return this.$store.getters.getBirdsInState;
-  }
-
-  get flickrNotice () {
-      return process.env.FLICKR_NOTICE;
   }
 
   async asyncData ({ store, route }: { [key: string]: any}) {
@@ -46,7 +39,10 @@ export default class PageState extends Vue {
     await Promise.all(store.getters.getBirdsInState.map((bird: any) => {
       // only request image if species not stored yet
       if (!store.getters.getBirdImage(bird.sciName)) {
-        return store.dispatch('setBirdImage', bird.sciName);
+        return store.dispatch('setBirdImage', {
+          sciName: bird.sciName,
+          commonName: bird.comName
+        });
       } else {
         return null;
       }
