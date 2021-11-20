@@ -1,6 +1,6 @@
 <template>
   <div class="c-PageHome">
-    <h1>US States and Their Birds</h1>
+    <h1 class="c-PageHome_title">US States and Their Birds</h1>
     <h4>Click on any state to view the birds recently observed in that state.</h4>
     <div class="c-PageHome_stateContainer">
       <NuxtLink
@@ -34,6 +34,10 @@ export default class PageHome extends Vue {
   a {
     text-decoration: none;
     color: #FFFFFF;
+  }
+
+  &_title {
+    margin-bottom: 20px;
   }
 
   &_stateContainer {

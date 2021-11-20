@@ -1,7 +1,7 @@
 <template>
   <div class="c-Layout">
     <nuxt />
-    <p>{{ flickrNotice }}</p>
+    <p class="c-Layout_notice">{{ flickrNotice }}</p>
   </div>
 </template>
 
@@ -16,7 +16,20 @@ export default class DefaultLayout extends Vue {
 </script>
 
 <style lang="scss">
+body, h1, p {
+  padding: 0;
+  margin: 0;
+  width: 100%;
+}
 .c-Layout {
   background-color: #FFFFEF;
+  padding: 20px;
+
+  h1 {
+    margin-bottom: 20px;
+  }
+  &_notice {
+    margin-top: 20px;
+  }
 }
 </style>
