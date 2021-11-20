@@ -1,9 +1,11 @@
 <template>
-  <div class="c-BirdCard">
+  <div class="c-birdCard">
     <h2>{{ bird.comName }}</h2>
-    <h3>{{ bird.sciName }}</h3>
+    <h3 class="c-birdCard_scientific">{{ bird.sciName }}</h3>
     <p>Last seen on {{ bird.obsDt }} at {{ bird.locName }}</p>
-    <img :src="image" />
+    <div class="c-birdCard_imageContainer">
+      <img class="c-birdCard_image" :src="image" />
+    </div>
     <!-- TODO: add credit for images -->
   </div>
 </template>
@@ -48,11 +50,32 @@
 </script>
 
 <style lang="scss">
-  .c-BirdCard {
+  .c-birdCard {
     max-height: 500px;
     max-width: 25vw;
-    border: 5px solid #44A6E8;
+    background-color: #44A6E8;
+    color: #28282F;
     border-radius: 5px;
     padding: 10px;
+    box-shadow: 10px 5px 20px #28282F;
+    display: flex;
+    flex-direction: column;
+
+    &_scientific {
+      font-style: italic;
+    }
+
+    &_imageContainer {
+      flex-grow: 2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    &_image {
+      height: 100%;
+      width: 100%;
+      // object-fit: cover;
+    }
   }
 </style>
