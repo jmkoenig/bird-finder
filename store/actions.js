@@ -1,6 +1,7 @@
 /**
  * ACTIONS
  */
+ import xml2js from 'xml2js';
 
 export default {
   async nuxtServerInit({ dispatch }) {
@@ -29,10 +30,16 @@ export default {
   },
 
   async setBirdImage({ commit }, payload) {
-    const params = `?method=flickr.photos.search&api_key=${process.env.FLICKR_API_KEY}&per_page=5&license=4&media=photos&extras=license,owner_name,date_taken,url_n&sort=date-taken-desc&tags=${payload.sciName},${payload.commonName}`;
+    const params = `?method=flickr.photos.search&api_key=${process.env.FLICKR_API_KEY}&per_page=5&license=4&media=photos&extras=license,owner_name,date_taken,url_n&sort=date-taken-desc&tags=${payload.sciName}`;
     const image = await this.$flickrAPI.$get(params);
     const speciesImage = {};
-    speciesImage[payload.sciName] = image;
+    xml2js.parseString(image, (err, result) => {
+      if (result?.rsp?.photos?.[0]?.photo?.[0]?.$) {
+        speciesImage[payload.sciName] = result.rsp.photos[0].photo[0].$;
+      } else {
+        speciesImage[payload.sciName] = {}
+      }
+    });
     commit('setBirdImage', speciesImage);
   }
 }

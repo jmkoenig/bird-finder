@@ -35,5 +35,6 @@
     ".nuxt",
     "dist"
   ],
-  "strictPropertyInitialization": false
+  "strictPropertyInitialization": false,
+  "noImplicitAny": false
 }

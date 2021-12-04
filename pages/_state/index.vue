@@ -1,13 +1,14 @@
 <template>
   <div>
-    <h1>{{ stateName }}</h1>
+    <NuxtLink :to="{ name: 'index', path: '/'}" class="c-PageState_home">Back</NuxtLink>
+    <h1 class="c-PageState_title">{{ stateName }}</h1>
     <div class="c-PageState_container">
     <BirdCard
       v-for="birdObj in stateBirds"
       :key="birdObj.speciesCode"
       class="c-PageState_bird" 
       :bird="birdObj"
-      :imageXml="$store.getters.getBirdImage(birdObj.sciName)"
+      :image="$store.getters.getBirdImage(birdObj.sciName)"
     />
     </div>
   </div>
@@ -53,8 +54,17 @@ export default class PageState extends Vue {
 
 <style lang="scss">
 .c-PageState {
+  &_home {
+    
+  }
+
+  &_title {
+    text-align: center;
+  }
+
   &_container {
     display: flex;
+    justify-content: center;
     flex-flow: row wrap;
     gap: 1.5rem;
   }
