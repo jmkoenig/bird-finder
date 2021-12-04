@@ -11,7 +11,6 @@
     <div class="c-birdCard_imageCredit">
       <a :href="imageOriginalUrl">Photo</a> by <a :href="imageOwnerUrl">{{ image.ownername }}</a> is licensed under <a :href="licenseUrl">CC BY 4.0</a>
     </div>
-    <!-- TODO: add credit for images -->
   </div>
 </template>
 
@@ -24,7 +23,7 @@
     readonly bird!: { [key: string]: string | string[] };
 
     @Prop({ default: null })
-    readonly image!: Object;
+    readonly image!: any;
 
     get imageOwnerUrl () {
       return process.env.FLICKR_OWNER_URL?.replace('{ownerId}', this.image.owner);
