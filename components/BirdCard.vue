@@ -6,7 +6,10 @@
     </div>
     <p>Last seen on {{ bird.obsDt }} at {{ bird.locName }}</p>
     <div class="c-birdCard_imageContainer">
-      <img class="c-birdCard_image" :src="imageUrl" />
+      <img class="c-birdCard_image" :src="image.url_n" />
+    </div>
+    <div class="c-birdCard_imageCredit">
+      <a :href="imageOriginalUrl">Photo</a> by <a :href="imageOwnerUrl">{{ image.ownername }}</a> is licensed under <a :href="licenseUrl">CC BY 4.0</a>
     </div>
     <!-- TODO: add credit for images -->
   </div>
@@ -14,7 +17,6 @@
 
 <script lang="ts">
   import { Component, Prop, Vue } from 'nuxt-property-decorator';
-  import $ from 'jquery';
 
   @Component
   export default class BirdCard extends Vue {
@@ -24,12 +26,16 @@
     @Prop({ default: null })
     readonly image!: Object;
 
-    get imageUrl () {
-      const serverId = this.image.server;
-      const imageId = this.image.id;
-      const secret = this.image.secret;
-      const sizeSuffix = 'n';
-      return `https://live.staticflickr.com/${serverId}/${imageId}_${secret}_${sizeSuffix}.jpg`;
+    get imageOwnerUrl () {
+      return process.env.FLICKR_OWNER_URL?.replace('{ownerId}', this.image.owner);
+    }
+
+    get imageOriginalUrl () {
+      return process.env.FLICKR_ORIGINAL_URL?.replace('{ownerId}', this.image.owner).replace('{photoId}', this.image.id);
+    }
+
+    get licenseUrl () {
+      return process.env.CC_ATTRIBUTION_LICENSE;
     }
   }
 </script>
@@ -66,6 +72,10 @@
       max-width: 100%;
       max-height: 100%;
       // object-fit: cover;
+    }
+
+    &_imageCredit {
+      font-size: 12px;
     }
   }
 </style>
