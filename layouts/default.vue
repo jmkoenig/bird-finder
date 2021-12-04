@@ -17,6 +17,7 @@ export default class DefaultLayout extends Vue {
 
 <style lang="scss">
 body, h1, p {
+  font-family: Arial, Helvetica, sans-serif;
   padding: 0;
   margin: 0;
   width: 100%;
