@@ -7,6 +7,7 @@ export default {
     state.allStates.forEach(stateObj => {
       if (stateObj.name === stateName) {
         currentState = stateObj;
+        return;
       }
     })
     // return state.allStates.find(stateObj => stateObj.name === stateName);

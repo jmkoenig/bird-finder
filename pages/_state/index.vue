@@ -16,7 +16,9 @@
 
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator';
+
 import BirdCard from '~/components/BirdCard.vue';
+import { states, StateKey, IState } from '~/configs/states';
 
 @Component({
   components: {
@@ -24,8 +26,6 @@ import BirdCard from '~/components/BirdCard.vue';
   }
 })
 export default class PageState extends Vue {
-  stateName = this.$route.params.state;
-
   get stateObj () {
     return this.$store.getters.getCurrentState(this.stateName);
   }
@@ -34,9 +34,14 @@ export default class PageState extends Vue {
     return this.$store.getters.getBirdsInState;
   }
 
+  get stateName (): string {
+    return states[this.$route.params.state as StateKey].prettyName;
+  }
+
   async asyncData ({ store, route }: { [key: string]: any}) {
-    await store.dispatch('setStateBirds', route.params.state);
-    // this is super slow if store is empty
+    let state = states[route.params.state as StateKey].prettyName;
+    await store.dispatch('setStateBirds', state);
+    // TODO: this is super slow if store is empty
     await Promise.all(store.getters.getBirdsInState.map((bird: any) => {
       // only request image if species not stored yet
       if (!store.getters.getBirdImage(bird.sciName)) {

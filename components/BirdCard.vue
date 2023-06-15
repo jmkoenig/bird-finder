@@ -15,66 +15,66 @@
 </template>
 
 <script lang="ts">
-  import { Component, Prop, Vue } from 'nuxt-property-decorator';
+import { Component, Prop, Vue } from 'nuxt-property-decorator';
 
-  @Component
-  export default class BirdCard extends Vue {
-    @Prop({ default: null})
-    readonly bird!: { [key: string]: string | string[] };
+@Component
+export default class BirdCard extends Vue {
+  @Prop({ default: null})
+  readonly bird!: { [key: string]: string | string[] };
 
-    @Prop({ default: null })
-    readonly image!: any;
+  @Prop({ default: null })
+  readonly image!: any;
 
-    get imageOwnerUrl () {
-      return process.env.FLICKR_OWNER_URL?.replace('{ownerId}', this.image.owner);
-    }
-
-    get imageOriginalUrl () {
-      return process.env.FLICKR_ORIGINAL_URL?.replace('{ownerId}', this.image.owner).replace('{photoId}', this.image.id);
-    }
-
-    get licenseUrl () {
-      return process.env.CC_ATTRIBUTION_LICENSE;
-    }
+  get imageOwnerUrl () {
+    return process.env.FLICKR_OWNER_URL?.replace('{ownerId}', this.image.owner);
   }
+
+  get imageOriginalUrl () {
+    return process.env.FLICKR_ORIGINAL_URL?.replace('{ownerId}', this.image.owner).replace('{photoId}', this.image.id);
+  }
+
+  get licenseUrl () {
+    return process.env.CC_ATTRIBUTION_LICENSE;
+  }
+}
 </script>
 
 <style lang="scss">
-  .c-birdCard {
-    max-height: 500px;
-    max-width: 25vw;
-    background-color: #44A6E8;
-    color: #28282F;
-    border-radius: 5px;
-    padding: 25px;
-    box-shadow: 10px 5px 20px #28282F;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+.c-birdCard {
+  max-height: 500px;
+  max-width: 25vw;
+  background-color: #44A6E8;
+  color: #28282F;
+  border-radius: 5px;
+  padding: 25px;
+  box-shadow: 5px 5px 5px gray;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 
-    h2, h3 {
-      margin: 0;
-    }
-
-    &_scientific {
-      font-style: italic;
-    }
-
-    &_imageContainer {
-      flex-grow: 2;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    &_image {
-      max-width: 100%;
-      max-height: 100%;
-      // object-fit: cover;
-    }
-
-    &_imageCredit {
-      font-size: 12px;
-    }
+  h2, h3 {
+    margin: 0;
   }
+
+  &_scientific {
+    font-style: italic;
+  }
+
+  &_imageContainer {
+    flex-grow: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 150px;
+  }
+
+  &_image {
+    max-width: 100%;
+    max-height: 100%;
+  }
+
+  &_imageCredit {
+    font-size: 12px;
+  }
+}
 </style>
