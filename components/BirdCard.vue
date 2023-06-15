@@ -43,7 +43,7 @@ export default class BirdCard extends Vue {
 .c-birdCard {
   max-height: 500px;
   max-width: 25vw;
-  background-color: #44A6E8;
+  background-color: #eac6ab;
   color: #28282F;
   border-radius: 5px;
   padding: 25px;

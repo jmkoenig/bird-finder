@@ -22,14 +22,14 @@ html, body, #__nuxt, #__layout {
 }
 
 body, h1, p {
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "diphylleia";
   margin: 0;
 }
 
 .c-layout {
   box-sizing: border-box;
   position: relative;
-  background-color: #FFFFEF;
+  background-color: #fff2e3;
   padding: 20px;
 
   h1 {
