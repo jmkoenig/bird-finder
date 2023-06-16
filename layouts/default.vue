@@ -37,6 +37,7 @@ body, h1, p {
   }
 
   &_notice {
+    font-family: Arial, Helvetica, sans-serif;
     margin-top: 20px;
   }
 }

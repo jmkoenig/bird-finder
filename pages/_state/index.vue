@@ -42,6 +42,7 @@ export default class PageState extends Vue {
     let state = states[route.params.state as StateKey].prettyName;
     await store.dispatch('setStateBirds', state);
     // TODO: this is super slow if store is empty
+    // Ajax cards below the fold?
     await Promise.all(store.getters.getBirdsInState.map((bird: any) => {
       // only request image if species not stored yet
       if (!store.getters.getBirdImage(bird.sciName)) {

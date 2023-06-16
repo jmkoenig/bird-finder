@@ -30,6 +30,7 @@ export default {
   },
 
   async setBirdImage({ commit }, payload) {
+    // url_n = 320px width image
     const params = `?method=flickr.photos.search&api_key=${process.env.FLICKR_API_KEY}&per_page=5&license=4&media=photos&extras=license,owner_name,date_taken,url_n&sort=date-taken-desc&tags=${payload.sciName}`;
     const image = await this.$flickrAPI.$get(params);
     const speciesImage = {};

@@ -1,12 +1,12 @@
 <template>
-  <div class="c-birdCard">
+  <div class="c-birdCard" ref="birdCard">
     <div class="c-birdCard_header">
       <h2>{{ bird.comName }}</h2>
       <h3 class="c-birdCard_scientific">{{ bird.sciName }}</h3>
     </div>
     <p>Last seen on {{ bird.obsDt }} at {{ bird.locName }}</p>
     <div class="c-birdCard_imageContainer">
-      <img class="c-birdCard_image" :src="image.url_n" />
+      <img class="c-birdCard_image" :src="load ? image.url_n : ''" loading="lazy" />
     </div>
     <div class="c-birdCard_imageCredit">
       <a :href="imageOriginalUrl">Photo</a> by <a :href="imageOwnerUrl">{{ image.ownername }}</a> is licensed under <a :href="licenseUrl">CC BY 4.0</a>
@@ -19,11 +19,18 @@ import { Component, Prop, Vue } from 'nuxt-property-decorator';
 
 @Component
 export default class BirdCard extends Vue {
+  public observer: IntersectionObserver|null = null;
+  public load: boolean = false;
+
   @Prop({ default: null})
   readonly bird!: { [key: string]: string | string[] };
 
   @Prop({ default: null })
   readonly image!: any;
+
+  $refs!: {
+    birdCard: HTMLElement
+  }
 
   get imageOwnerUrl () {
     return process.env.FLICKR_OWNER_URL?.replace('{ownerId}', this.image.owner);
@@ -35,6 +42,30 @@ export default class BirdCard extends Vue {
 
   get licenseUrl () {
     return process.env.CC_ATTRIBUTION_LICENSE;
+  }
+
+  loadImage (entries: IntersectionObserverEntry[]) {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        this.load = true;
+      }
+    });
+  }
+
+  mounted () {
+    if (this.$refs?.birdCard) {
+      // Load image when it's close to the bottom of the viewport
+      this.observer = new IntersectionObserver(this.loadImage, {
+        rootMargin: '0px 0px 25%', // extend bottom margin by 25% of viewport
+        threshold: 1
+      });
+
+      this.observer.observe(this.$refs.birdCard);
+    }
+  }
+
+  beforeDestroy () {
+    this.observer?.disconnect();
   }
 }
 </script>
