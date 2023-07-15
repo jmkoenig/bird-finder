@@ -16,7 +16,7 @@
     "es6-promise": "^4.2.8",
     "glob-parent": "^6.0.1",
     "jquery": "^3.6.0",
-    "nuxt": "^2.15.7",
+    "nuxt": "^2.17.1",
     "nuxt-property-decorator": "^2.9.1",
     "vuex": "^3.6.2",
     "vuex-persist": "^3.1.3",
