@@ -1,5 +1,17 @@
 # bird-finder
 
+## Run with Docker
+```bash
+# Build the image and run the container
+$ make
+
+# Stop running container
+$ make stop
+
+# Remove the container and image
+$ make remove
+```
+
 ## Build Setup
 
 ```bash
