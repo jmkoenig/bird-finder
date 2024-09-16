@@ -5,12 +5,12 @@
       <h3 class="c-birdCard_scientific">{{ bird.sciName }}</h3>
     </div>
     <p>Last seen on {{ bird.obsDt }} at {{ bird.locName }}</p>
-    <div class="c-birdCard_imageContainer">
+    <div v-if="image" class="c-birdCard_imageContainer">
       <img class="c-birdCard_image" :src="load ? image.url_n : ''" loading="lazy" />
     </div>
-    <div class="c-birdCard_imageCredit">
+    <!-- <div v-if="image" class="c-birdCard_imageCredit">
       <a :href="imageOriginalUrl">Photo</a> by <a :href="imageOwnerUrl">{{ image.ownername }}</a> is licensed under <a :href="licenseUrl">CC BY 4.0</a>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -25,8 +25,8 @@ export default class BirdCard extends Vue {
   @Prop({ default: null})
   readonly bird!: { [key: string]: string | string[] };
 
-  @Prop({ default: null })
-  readonly image!: any;
+  // @Prop({ default: null })
+  // readonly image!: any;
 
   $refs!: {
     birdCard: HTMLElement
@@ -42,6 +42,10 @@ export default class BirdCard extends Vue {
 
   get licenseUrl () {
     return process.env.CC_ATTRIBUTION_LICENSE;
+  }
+
+  get image () {
+    return this.$store.getters.getBirdImage(this.bird.commonName);
   }
 
   loadImage (entries: IntersectionObserverEntry[]) {

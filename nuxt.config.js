@@ -24,7 +24,7 @@ export default {
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
     '~/plugins/ebirdAPI.js',
-    '~/plugins/flickrAPI.js'
+    '~/plugins/imageAPI.js'
   ],
 
   // define runtime config vars for ebird and flickr API axios instances
@@ -35,7 +35,8 @@ export default {
     EBIRD_API_KEY: process.env.EBIRD_API_KEY,
     FLICKR_API_URL: process.env.FLICKR_API_URL,
     FLICKR_API_KEY_NAME: process.env.FLICKR_API_KEY_NAME,
-    FLICKR_API_KEY: process.env.FLICKR_API_KEY
+    FLICKR_API_KEY: process.env.FLICKR_API_KEY,
+    WIKI_API_URL: process.env.WIKI_API_URL
   },
 
   // Auto import components: https://go.nuxtjs.dev/config-components

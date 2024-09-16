@@ -20,7 +20,7 @@ import UsaMapSvg from '~/components/UsaMapSvg.vue';
 })
 export default class PageHome extends Vue {
   get stateCodes () {
-      return this.$store.getters.getAllStates;
+    return this.$store.getters.getAllStates;
   }
 }
 </script>

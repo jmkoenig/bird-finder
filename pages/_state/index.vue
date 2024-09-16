@@ -4,11 +4,10 @@
     <h1 class="c-PageState_title">{{ stateName }}</h1>
     <div class="c-PageState_container">
     <BirdCard
-      v-for="birdObj in stateBirds"
-      :key="birdObj.speciesCode"
+      v-for="bird in stateBirds"
+      :key="bird.speciesCode"
       class="c-PageState_bird" 
-      :bird="birdObj"
-      :image="$store.getters.getBirdImage(birdObj.sciName)"
+      :bird="bird"
     />
     </div>
   </div>
@@ -43,17 +42,14 @@ export default class PageState extends Vue {
     await store.dispatch('setStateBirds', state);
     // TODO: this is super slow if store is empty
     // Ajax cards below the fold?
-    await Promise.all(store.getters.getBirdsInState.map((bird: any) => {
-      // only request image if species not stored yet
-      if (!store.getters.getBirdImage(bird.sciName)) {
-        return store.dispatch('setBirdImage', {
-          sciName: bird.sciName,
-          commonName: bird.comName
-        });
-      } else {
-        return null;
-      }
-    }));
+    const birdsWithNoImage = store.getters.getBirdsInState.filter((bird: any) => {
+      return !store.getters.getBirdImage(bird.commonName);
+    });
+    await store.dispatch('setBirdImage', {
+      birds: birdsWithNoImage.map((bird: any) => {
+        return { sciName: bird.sciName, commonName: bird.comName };
+      })
+    });
   }
 }
 </script>
