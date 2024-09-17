@@ -29,36 +29,47 @@ export default {
     commit('setNotableBirds', notableBirds);
   },
 
+  // TODO: Client-side requests return a CORS error.
+  // TODO: Make each image request(s) when the images are lazy loaded in, instead of here all at once.
   async setBirdImage({ commit }, payload) {
     try {
       /**
        * 1. Make one request to search for images of all birds using their common name
        */
       // Build titles query param by joining all common names with pipe
-      const query = payload.birds?.map(bird => bird.commonName).join('|');
+      const query = payload.birds?.map(bird => bird.comName).join('|');
       const searchParams = `?action=query&prop=pageimages|pageprops&format=json&redirects&origin=*&titles=${query}`;
       const searchResponse = await this.$imageAPI.$get(searchParams);
 
       /**
        * 2. Use search response to get the full image url for each bird
        */
-      const pages = searchResponse?.query?.pages;
-      const imageUrls = [];
+      const pages = searchResponse?.query?.pages; // Object of data objects
+      const redirects = searchResponse?.query?.redirects; // Array of objects pointing passed name to name returned in data
+      const imageFiles = [];
       Object.keys(pages).forEach(pageId => {
-        imageUrls.push(pages[pageId].pageprops.page_image_free); // Use public domain version of image
+        const page = pages[pageId];
+        const redirect = redirects.find(name => name.to === page.title);
+        const file = page.pageprops?.page_image_free; // Use public domain version of image
+        imageFiles.push({
+          originalName: redirect.from,
+          redirectedName: redirect.to,
+          file
+        });
       });
-      const images = await Promise.all(imageUrls.map(img => {
-        const imageRequestParams = `?action=query&format=json&prop=imageinfo&iiprop=url&redirects&origin=*&titles=File:${img}`;
+      const images = await Promise.all(imageFiles.map(bird => {
+        const imageRequestParams = `?action=query&format=json&prop=imageinfo&iiprop=url&redirects&origin=*&titles=File:${bird.file}`;
         return this.$imageAPI.$get(imageRequestParams);
       }));
-      images.forEach(img => {
+      images.forEach((img, index) => {
         // Take the first object off of pages
         const key = Object.keys(img.query.pages)[0];
-        const imageInfo = img.query.pages[key].imageinfo[0];
-        console.log(imageInfo.url);
-        // commit('setBirdImage', {
-          
-        // });
+        const imageInfo = img.query.pages[key]?.imageinfo?.[0];
+        const id = imageFiles[index].originalName?.toLowerCase().split(' ').join('_');
+        commit('setBirdImage', {
+          id,
+          url: imageInfo.url
+        });
       });
     } catch (e) {
       console.error(e);

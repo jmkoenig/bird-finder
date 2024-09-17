@@ -26,7 +26,7 @@ export default {
     return state.notableStateBirds;
   },
 
-  getBirdImage: (state) => (speciesName) => {
-    return state.birdImages[speciesName];
+  getBirdImage: (state) => (id) => {
+    return state.birdImages.find(bird => bird.id === id);
   }
 }

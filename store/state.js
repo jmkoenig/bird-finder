@@ -6,6 +6,6 @@ export default () => {
     allStates: [],
     birdsInState: [],
     notableStateBirds: [],
-    birdImages: {}
+    birdImages: []
   }
 }

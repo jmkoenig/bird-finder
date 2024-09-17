@@ -5,12 +5,15 @@
       <h3 class="c-birdCard_scientific">{{ bird.sciName }}</h3>
     </div>
     <p>Last seen on {{ bird.obsDt }} at {{ bird.locName }}</p>
-    <div v-if="image" class="c-birdCard_imageContainer">
-      <img class="c-birdCard_image" :src="load ? image.url_n : ''" loading="lazy" />
+    <div class="c-birdCard_imageContainer">
+      <img
+        v-if="imageSrc"
+        class="c-birdCard_image"
+        :src="load ? imageSrc : ''" loading="lazy"
+        width="640"
+        height="360"
+      />
     </div>
-    <!-- <div v-if="image" class="c-birdCard_imageCredit">
-      <a :href="imageOriginalUrl">Photo</a> by <a :href="imageOwnerUrl">{{ image.ownername }}</a> is licensed under <a :href="licenseUrl">CC BY 4.0</a>
-    </div> -->
   </div>
 </template>
 
@@ -19,33 +22,20 @@ import { Component, Prop, Vue } from 'nuxt-property-decorator';
 
 @Component
 export default class BirdCard extends Vue {
-  public observer: IntersectionObserver|null = null;
-  public load: boolean = false;
+  observer: IntersectionObserver|null = null;
+  load: boolean = false;
 
   @Prop({ default: null})
-  readonly bird!: { [key: string]: string | string[] };
-
-  // @Prop({ default: null })
-  // readonly image!: any;
+  readonly bird!: { [key: string]: string };
 
   $refs!: {
     birdCard: HTMLElement
   }
 
-  get imageOwnerUrl () {
-    return process.env.FLICKR_OWNER_URL?.replace('{ownerId}', this.image.owner);
-  }
-
-  get imageOriginalUrl () {
-    return process.env.FLICKR_ORIGINAL_URL?.replace('{ownerId}', this.image.owner).replace('{photoId}', this.image.id);
-  }
-
-  get licenseUrl () {
-    return process.env.CC_ATTRIBUTION_LICENSE;
-  }
-
-  get image () {
-    return this.$store.getters.getBirdImage(this.bird.commonName);
+  // TODO: See if it's possible to get lower quality image to match size
+  get imageSrc () {
+    const id = this.bird?.comName?.toLowerCase().split(' ').join('_');
+    return this.$store.getters.getBirdImage(id)?.url;
   }
 
   loadImage (entries: IntersectionObserverEntry[]) {
@@ -76,8 +66,7 @@ export default class BirdCard extends Vue {
 
 <style lang="scss">
 .c-birdCard {
-  max-height: 500px;
-  max-width: 25vw;
+  width: 770px;
   background-color: #eac6ab;
   color: #28282F;
   border-radius: 5px;
@@ -100,7 +89,7 @@ export default class BirdCard extends Vue {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 150px;
+    min-height: 400px;
   }
 
   &_image {

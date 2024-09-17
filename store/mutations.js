@@ -15,6 +15,6 @@ export default {
   },
 
   setBirdImage(state, payload) {
-    Object.assign(state.birdImages, payload);
+    state.birdImages.push(payload);
   }
 }
